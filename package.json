@@ -12,5 +12,8 @@
     "express": "^4.13.4",
     "pug": "^2.0.0-beta2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mongoose": "^5.4.0"
+  }
 }

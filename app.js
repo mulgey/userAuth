@@ -2,6 +2,14 @@
 const express = require('express');
 const app = express();
 
+// let's connect mongoose
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/kitapkurdu', { useNewUrlParser: true }); // kitapkurdu kısmı, oluşturduğumuz veritabanına verdiğimiz isim bakımından opsiyonel
+const db = mongoose.connection;
+
+// mongoose error stuff
+db.on('error', console.error.bind(console, 'connection error:'));
+
 // parse incoming requests
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); //json kullanılmış(?)
