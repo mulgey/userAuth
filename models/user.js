@@ -15,7 +15,7 @@ var kullanıcıŞeması = new Schema({
         required: true,
         trim: true
     },
-    favouriteBook: {
+    favoriteBook: {
         type: String,
         required: true,
         trim: true
@@ -26,5 +26,5 @@ var kullanıcıŞeması = new Schema({
     }
 });
 
-var Kullanıcı = mongoose.model('Kullanıcı', kullanıcıŞeması);
+var Kullanıcı = mongoose.model('Kullanıcılar', kullanıcıŞeması);
 module.exports = Kullanıcı;

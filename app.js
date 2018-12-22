@@ -2,7 +2,7 @@
 const express = require('express');
 const app = express();
 
-// let's connect mongoose
+// let's use mongoose and connect it
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/kitapkurdu', { useNewUrlParser: true }); // kitapkurdu kısmı, oluşturduğumuz veritabanına verdiğimiz isim bakımından opsiyonel
 const db = mongoose.connection;

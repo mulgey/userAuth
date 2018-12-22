@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Kullanıcılar = require('../models/user');
 
 // GET /
 router.get('/', function(req, res, next) {
@@ -23,7 +24,38 @@ router.get('/register', (req, res, next) => {
 
 // POST /register
 router.post('/register', (req, res, next) => {
-  return res.send('Kayıt işi tamam!');
+  // alanlar dolu olsun
+  if (req.body.email &&
+    req.body.name &&
+    req.body.favoriteBook &&
+    req.body.password &&
+    req.body.confirmPassword) {
+      //şifreler eşleşsin
+      if (req.body.password !== req.body.confirmPassword) {
+        var err = new Error('Şifreler eşleşmiyor');
+        err.status = 400;
+        return next(err);
+      }
+      // Herşey yolundaysa form bilgileriyle nesnemizi oluşturalım
+      var kullanıcıVerisi = {
+        email: req.body.email,
+        name: req.body.name,
+        favoriteBook: req.body.favoriteBook,
+        password: req.body.password
+      }
+      // Oluşturduğumuz dökümanı mongo veritabanına yerleştirelim
+      Kullanıcılar.create(kullanıcıVerisi, (error, kullanıcı) => {
+        if (error) {
+          return next(error);
+        } else {
+          return res.redirect('/profile');
+        }
+      })      
+    } else {
+      var err = new Error('Hepsini dolduralım lütfen')
+      err.status = 400;
+      return next(err);
+    }
 });
 
 module.exports = router;
