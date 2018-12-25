@@ -15,6 +15,14 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); //json kullanılmış(?)
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// We want sessions and cookies
+const session = require('express-session');
+app.use( session({
+  secret: 'NSI Racing', // zorunlu olan tek kısım
+  resave: true, // req esnasındaki değişimlerde güncellemeye zorlar
+  saveUninitialized: false // başlangıç değeri olmayan session un kaydedilmesine karar verir
+}));
+
 // serve static files from /public
 app.use(express.static(__dirname + '/public')); // __dirname kullanılmış(?)
 
