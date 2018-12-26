@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Kullanıcılar = require('../models/user');
+var User = require('../models/user');
 
 // GET /
 router.get('/', function(req, res, next) {
@@ -24,7 +24,22 @@ router.get('/login', (req, res, next) => {
 
 // POST /login
 router.post('/login', (req, res, next) => {
-  return res.send('Logged In!');
+  if (req.body.email && req.body.password) {
+    User.authenticate(req.body.email, req.body.password, function (error, user) { // User = en üstte tanımladığımız model adı. authenticate = user.js içerisinde tanımladığımız metod.
+      if ( error || !user) { // Hata olasılıkların hepsine karşın ...
+        var err = new Error('Bilgilerde hata olduğundan eminim');
+        err.status = 401;
+        return next(err);
+      } else { // Buraya kadar sağ salim geldiyse eğer, veritabanındaki ID'sini session ID olarak kaydetmek isteriz. (sunucuda saklanacak)
+        req.session.userId = user._id; // req e ulaşabildiğin herhangi bir yerden session bilgisini görebilir ve değiştirebilirsin. Bu arada cookie otomatik olarak oluşur. req.session ın sonuna bir özellik yazıp ID ile eşleştirince = Hem "Session a ekle" hem de "session yoksa oluştur" 
+        return res.redirect('/profile'); 
+      }
+    }); 
+  } else {
+    var err = new Error("Bilgileri tam olarak verirsen girişini sağlayabilirim");
+    err.status= 401;
+    return next(err);
+  }
 });
 
 // GET /register
@@ -47,17 +62,18 @@ router.post('/register', (req, res, next) => {
         return next(err);
       }
       // Herşey yolundaysa form bilgileriyle nesnemizi oluşturalım
-      var kullanıcıVerisi = {
+      var userData = {
         email: req.body.email,
         name: req.body.name,
         favoriteBook: req.body.favoriteBook,
         password: req.body.password
       }
       // Oluşturduğumuz dökümanı mongo veritabanına yerleştirelim
-      Kullanıcılar.create(kullanıcıVerisi, (error, kullanıcı) => {
+      User.create(userData, (error, user) => {
         if (error) {
           return next(error);
         } else {
+          req.session.kullanıcıID = user._id; // req e ulaşabildiğin herhangi bir yerden session bilgisini görebilir ve değiştirebilirsin. Bu arada cookie otomatik olarak oluşur. req.session ın sonuna bir özellik yazıp ID ile eşleştirince = Hem "Session a ekle" hem de "session yoksa oluştur"
           return res.redirect('/profile');
         }
       })      

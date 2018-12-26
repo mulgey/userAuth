@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost:27017/kitapkurdu', { useNewUrlParser: true
 const db = mongoose.connection;
 
 // mongoose error stuff
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console, 'connection error:')); // Bu örnekte çalışmadı, ilk fırsatta irdeleyelim
 
 // parse incoming requests
 const bodyParser = require('body-parser');
