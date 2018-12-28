@@ -64,6 +64,21 @@ router.get('/register', (req, res, next) => {
   return res.render('register', { title: 'Sign Up' });
 });
 
+// GET /logout
+router.get('/logout', function(req, res, next) {
+  if (req.session) { // session var mı yok mu diye kontrol ediyoruz
+    // varsa siliyoruz
+    req.session.destroy(function(err) { // fonksiyon kısmı destroy işi sonrası ile ilgilenir
+      if(err) {
+        return next(err);
+      } else { 
+        // hata yoksa ana sayfaya yönlendir
+        return res.redirect('/');
+      }
+    });
+  }
+});
+
 // POST /register
 router.post('/register', (req, res, next) => {
   // alanlar dolu olsun

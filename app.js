@@ -23,6 +23,12 @@ app.use( session({
   saveUninitialized: false // başlangıç değeri olmayan session un kaydedilmesine karar verir
 }));
 
+// Make userID usable in templates
+app.use( (req, res, next) => {
+  res.locals.currentUser = req.session.userId; // routes --> index.js --> POST /login de tanımlamış olduğumuz userId kısmını kullanıma açtık. "locals" res nesnesine bilgi eklemeye yarar.
+  next();
+})
+
 // serve static files from /public
 app.use(express.static(__dirname + '/public')); // __dirname kullanılmış(?)
 
