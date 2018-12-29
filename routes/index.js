@@ -1,6 +1,12 @@
+// Express te router özelliğini kullanıma açtık
 var express = require('express');
 var router = express.Router();
+
+// Mongo veritabanı için şemamızı ekledik
 var User = require('../models/user');
+
+// Kendi middleware lerimizi üretip kulanıyoruz
+var mid = require('../middleware');
 
 // GET /
 router.get('/', function(req, res, next) {
@@ -18,7 +24,7 @@ router.get('/contact', function(req, res, next) {
 });
 
 // GET /login
-router.get('/login', (req, res, next) => {
+router.get('/login', mid.yassak, (req, res, next) => { // login route una geldiğinde, session yoksa /profile e gönderecek olan mw i gömdük
   return res.render('login', { title: 'Log In'});
 });
 
@@ -60,7 +66,7 @@ router.post('/login', (req, res, next) => {
 });
 
 // GET /register
-router.get('/register', (req, res, next) => {
+router.get('/register', mid.yassak, (req, res, next) => { // register route una geldiğinde, session yoksa /profile e gönderecek olan mw i gömdük
   return res.render('register', { title: 'Sign Up' });
 });
 
