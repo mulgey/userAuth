@@ -17,11 +17,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // We want sessions and cookies
 const session = require('express-session');
-app.use( session({
+// Session-storage için kullandığımız modül (express-session dan sonra olmalı)
+const mongoStore = require('connect-mongo')(session); // session lara bağlanmasını sağlar. Artık depo yeri mongo veritabanı.
+app.use(session({
   secret: 'NSI Racing', // zorunlu olan tek kısım
   resave: true, // req esnasındaki değişimlerde güncellemeye zorlar
-  saveUninitialized: false // başlangıç değeri olmayan session un kaydedilmesine karar verir
+  saveUninitialized: false, // başlangıç değeri olmayan session un kaydedilmesine karar verir
+  store: new mongoStore({
+    mongooseConnection: db // mongoose kullanıdğımız bölümde cost db = mongoose.connection olarak tanımlamıştık, o bakımdan. Bu kodun, o bölümün alt kısmında olması zorunludur. connect-mongo dan önce olması gerektiği gibi
+  })
 }));
+
+
 
 // Make userID usable in templates
 app.use( (req, res, next) => {

@@ -29,12 +29,13 @@ router.get('/login', mid.yassak, (req, res, next) => { // login route una geldi�
 });
 
 // GET /profile
-router.get('/profile', (req, res, next) => {
-  if ( !req.session.userId ) {
+router.get('/profile', mid.kimlik, (req, res, next) => {
+  // Bu kısım, kimlik middleware i geldikten sonra gereksiz oldu, kaldırdık
+  /* if ( !req.session.userId ) {
     var err = new Error("Kimliğinizi görelim, giriş sayfasına lütfen");
     err.status = 403;
     return next(err);
-  }
+  } */
   User.findById(req.session.userId)
     .exec(function (error, user) {
       if (error) {
